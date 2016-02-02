@@ -6,7 +6,7 @@ import {
 }
 from 'react-router';
 import NavbarStore from '../stores/NavbarStore';
-import NavbarActions from '../stores/NavbarActions';
+import NavbarActions from '../actions/NavbarActions';
 
 class Navbar extends React.Component {
   constructor(props) {
