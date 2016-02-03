@@ -2,7 +2,7 @@
 
 import React from 'react';
 import AddCharacterStore from '../stores/AddCharacterStore';
-import AddCharacterActions from '../stores/AddCharacterActions';
+import AddCharacterActions from '../actions/AddCharacterActions';
 
 class AddCharacter extends React.Component {
   constructor(props) {
