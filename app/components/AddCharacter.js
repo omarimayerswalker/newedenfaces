@@ -15,7 +15,7 @@ class AddCharacter extends React.Component {
     AddCharacterStore.listen(this.onChange);
   }
 
-  componentWillMount() {
+  componentWillUnmount() {
     AddCharacterStore.unlisten(this.onChange);
   }
 

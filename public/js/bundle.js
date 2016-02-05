@@ -208,8 +208,8 @@ var AddCharacter = function (_React$Component) {
       _AddCharacterStore2.default.listen(this.onChange);
     }
   }, {
-    key: 'componentWillMount',
-    value: function componentWillMount() {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
       _AddCharacterStore2.default.unlisten(this.onChange);
     }
   }, {

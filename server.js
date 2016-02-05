@@ -41,27 +41,26 @@ app.use(express.static(path.join(__dirname, 'public')));
  */
 
 app.post('/api/characters', function(req, res, next) {
+  var parser = new xml2js.Parser();
   var gender = req.body.gender;
   var characterName = req.body.name;
   var characterIdLookupUrl = 'https://api.eveonline.com/eve/CharacterID.xml.aspx?names=' + characterName;
 
-  var parser = new xml2js.Parser();
 
   async.waterfall([
     function(callback) {
       request.get(characterIdLookupUrl, function(err, request, xml) {
-        if (err) return next(err);
+        if (err) {return next(err);}
         parser.parseString(xml, function(err, parsedXml) {
-          if (err) return next(err);
+          if (err) {return next(err);}
           try {
-            var characterId = parsedXml.eveapi.result[0].rowset[0].$.characterId;
+            var characterId = parsedXml.eveapi.result[0].rowset[0].row[0].$.characterID;
             Character.findOne({characterId: characterId}, function(err, character) {
-              if (err) return next(err);
+              if (err) {return next(err);}
 
               if (character) {
                 return res.status(409).send({message: character.name + ' is already in the database.'});
               }
-
               callback(err, characterId);
             });
           } catch (e) {
@@ -74,9 +73,9 @@ app.post('/api/characters', function(req, res, next) {
       var characterInfoUrl ='https://api.eveonline.com/eve/CharacterInfo.xml.aspx?characterID=' + characterId;
 
       request.get({url: characterInfoUrl}, function(err, request, xml) {
-        if (err) return next(err);
+        if (err) {return next(err);}
         parser.parseString(xml, function(err, parsedXml) {
-          if (err) return res.send(err);
+          if (err) {return res.send(err);}
           try {
             var name = parsedXml.eveapi.result[0].characterName[0];
             var race = parsedXml.eveapi.result[0].race[0];
@@ -92,7 +91,7 @@ app.post('/api/characters', function(req, res, next) {
             });
 
             character.save(function(err) {
-              if (err) return next(err);
+              if (err) {return next(err);}
               res.send({message: characterName + ' has been added successfully!'});
             });
           } catch (e) {
