@@ -21,7 +21,7 @@ class AddCharacterActions {
       data: {name: name, gender: gender}
     })
       .done((data) => {
-        this.actions.addCharacterSucess(data.message);
+        this.actions.addCharacterSuccess(data.message);
       })
       .fail((jqXhr) => {
         this.actions.addCharacterFail(jqXhr.responseJSON.message);

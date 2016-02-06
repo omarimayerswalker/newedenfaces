@@ -32,7 +32,7 @@ var AddCharacterActions = function () {
         url: '/api/characters',
         data: { name: name, gender: gender }
       }).done(function (data) {
-        _this.actions.addCharacterSucess(data.message);
+        _this.actions.addCharacterSuccess(data.message);
       }).fail(function (jqXhr) {
         _this.actions.addCharacterFail(jqXhr.responseJSON.message);
       });
