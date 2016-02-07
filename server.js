@@ -36,6 +36,48 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 /**
+ * GET /api/characters
+ * Returns 2 random characters of the same gender that have not been voted yet
+ */
+
+app.get('/api/characters', function(req, res, next) {
+  var choices = ['Female', 'Male'];
+  var randomGender = _.sample(choices);
+
+  Character.find({random: {$near: [Math.random(), 0]}})
+    .where('voted', false)
+    .where('gender', randomGender)
+    .limit(2)
+    .exec(function(err, characters) {
+      if (err) return next(err);
+
+      if (characters.length === 2) {
+        return res.send(characters);
+      }
+
+      var oppositeGender = _.first(_.without(choices, randomGender));
+
+      Character
+        .find({random: {$near: [Math.random(), 0]}})
+        .where('voted', false)
+        .where('gender', oppositeGender)
+        .limit(2)
+        .exec(function(err, characters) {
+          if (err) {return next(err);}
+
+          if (characters.length === 2) {
+            return res.send(characters);
+          }
+
+          Character.update({$set: {voted: false}}, {multi: true}, function(err) {
+            if (err) {return next(err);}
+            res.send([]);
+          });
+        });
+    });
+});
+
+/**
  * POST /api/characters
  * Adds new character to the database
  */
