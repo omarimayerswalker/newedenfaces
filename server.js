@@ -17,6 +17,7 @@ var express = require('express');
 var path = require('path');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
+var _ = require('underscore');
 
 var mongoose = require('mongoose');
 var Character = require('./models/character');
