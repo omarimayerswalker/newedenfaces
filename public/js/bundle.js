@@ -107,7 +107,7 @@ var HomeActions = function () {
   function HomeActions() {
     _classCallCheck(this, HomeActions);
 
-    this.generateActions('getTwoCharactersSucess', 'getTwoCharactersFail', 'voteFail');
+    this.generateActions('getTwoCharactersSuccess', 'getTwoCharactersFail', 'voteFail');
   }
 
   _createClass(HomeActions, [{
@@ -1738,8 +1738,8 @@ var HomeStore = function () {
   }
 
   _createClass(HomeStore, [{
-    key: 'onGetTwoCharactersSucess',
-    value: function onGetTwoCharactersSucess(data) {
+    key: 'onGetTwoCharactersSuccess',
+    value: function onGetTwoCharactersSuccess(data) {
       this.characters = data;
     }
   }, {

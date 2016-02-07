@@ -9,7 +9,7 @@ class HomeStore {
     this.characters = [];
   }
 
-  onGetTwoCharactersSucess(data) {
+  onGetTwoCharactersSuccess(data) {
     this.characters = data;
   }
 

@@ -5,14 +5,14 @@ import alt from '../alt';
 class HomeActions {
   constructor() {
     this.generateActions(
-      'getTwoCharactersSucess',
+      'getTwoCharactersSuccess',
       'getTwoCharactersFail',
       'voteFail'
     );
   }
 
   getTwoCharacters() {
-    $.ajax({url: '/api/characters'})
+   $.ajax({url: '/api/characters'})
       .done(data => {
         this.actions.getTwoCharactersSuccess(data);
       })
