@@ -79,6 +79,36 @@ app.get('/api/characters', function(req, res, next) {
 });
 
 /**
+ * GET /api/characters/count
+ * Returns the total number of characters
+ */
+
+app.get('/api/characters/count', function(req, res, next) {
+  Character.count({}, function(err, count) {
+    if (err) {return next(err);}
+    res.send({count: count});
+  });
+});
+
+/**
+ * GET /api/characters/search
+ */
+
+app.get('/api/characters/search', function(req, res, next) {
+  var characterName = new RegExp(req.query.name, 'i');
+
+  Character.findOne({name: characterName}, function(err, character) {
+    if (err) {return next(err);}
+
+    if (!character) {
+      return res.status(404).send({message: 'Character not found.'});
+    }
+
+    res.send(character);
+  });
+});
+
+/**
  * PUT /api/characters
  * Update winning and losing count for both characters.
  */
