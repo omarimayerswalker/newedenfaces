@@ -109,6 +109,36 @@ app.get('/api/characters/search', function(req, res, next) {
 });
 
 /**
+ * GET /api/characters/top
+ */
+
+app.get('/api/characters/top', function(req, res, next) {
+  var params = req.query;
+  var conditions = {};
+
+  _.each(params, function(value, key) {
+    conditions[key] = new RegExp('^' + value + '$', 'i');
+  });
+
+  Character
+    .find(conditions)
+    .sort('-wins') // Sort in descending order (highers wins on top)
+    .limit(100)
+    .exec(function(err, characters) {
+      if (err) {return next(err);}
+
+      // Sort by winning percentage
+      characters.sort(function(a, b) {
+        if (a.wins / (a.wins + a.losses) < b.wins / (b.wins + b.losses)) {return 1;}
+        if (a.wins / (a.wins + a.losses) > b.wins / (b.wins + b.losses)) {return -1;}
+        return 0;
+      });
+
+      res.send(characters);
+    });
+});
+
+/**
  * PUT /api/characters
  * Update winning and losing count for both characters.
  */
