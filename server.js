@@ -139,6 +139,10 @@ app.get('/api/characters/top', function(req, res, next) {
 });
 
 /**
+ * GET /api/characters/shame
+ */
+
+/**
  * PUT /api/characters
  * Update winning and losing count for both characters.
  */
