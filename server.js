@@ -142,6 +142,66 @@ app.get('/api/characters/top', function(req, res, next) {
  * GET /api/characters/shame
  */
 
+app.get('/api/characters/shame', function(req, res, next) {
+  Character
+    .find()
+    .sort('-losses')
+    .limit(100)
+    .exec(function(err, characters) {
+      if (err) return next(err);
+      res.send(characters);
+    });
+});
+
+/**
+ * GET /api/characters/:id
+ * Return detailed character information
+ */
+
+app.get('/api/characters/:id', function(req, res, next) {
+  var id = req.params.id;
+
+  Character.findOne({characterId: id}, function(err, character) {
+    if (err) {return next(err);}
+
+    if (!character) {
+      return res.status(404).send({message: 'Characters not found.'});
+    }
+
+    res.send(character);
+  });
+});
+
+/**
+ * POST /api/report
+ * Reports a character. Character is removed after 4 reports.
+ */
+
+app.post('/api/report', function(req, res, next) {
+  var characterId = req.body.characterId;
+
+  Character.findOne({characterId: characterId}, function(err, character) {
+    if (err) {return next(err);}
+
+    if (!character) {
+      return res.status(404).send({message: 'Character not found.'});
+    }
+
+    character.reports++;
+
+    if (character.reports > 4) {
+      character.remove();
+      return res.send({message: character.name + ' has been deleted.'});
+    }
+
+    character.save(function(err) {
+      if (err) {return next(err);}
+      res.send({message: character.name + ' has been reported.'});
+    });
+  });
+});
+
+
 /**
  * PUT /api/characters
  * Update winning and losing count for both characters.
