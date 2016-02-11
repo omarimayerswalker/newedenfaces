@@ -201,6 +201,84 @@ app.post('/api/report', function(req, res, next) {
   });
 });
 
+/**
+ * GET /api/stats
+ * Returns characters statistics
+ */
+
+app.get('/api/stats', function(req, res, next) {
+  async.parallel([
+    function(callback) {
+      Character.count({}, function(err, count) {
+        callback(err, count);
+      });
+    },
+    function(callback) {
+      Character.count({race: 'Amarr'}, function(err, amarrCount) {
+        callback(err, amarrCount);
+      });
+    },
+    function(callback) {
+      Character.count({race: 'Caldari'}, function(err, caldariCount) {
+        callback(err, caldariCount);
+      });
+    },
+    function(callback) {
+      Character.count({race: 'Gallente'}, function(err, gallenteCount) {
+        callback(err, gallenteCount);
+      });
+    },
+    function(callback) {
+      Character.count({race: 'Minmatar'}, function(err, minmatarCount) {
+        callback(err, minmatarCount);
+      });
+    },
+    function(callback) {
+      Character.count({gender: 'Male'}, function(err, maleCount) {
+        callback(err, maleCount);
+      });
+    },
+    function(callback) {
+      Character.count({gender: 'Female'}, function(err, femaleCount) {
+        callback(err, femaleCount);
+      });
+    },
+    function(callback) {
+      Character
+        .find()
+        .sort('-wins')
+        .limit(100)
+        .select('race')
+        .exec(function(err, characters) {
+          if(err) {return next(err);}
+
+          var raceCount = _.countBy(characters, function(character) {return character.race;});
+          var max = _.max(raceCount, function(race) {return race});
+          var inverted = _.invert(raceCount);
+          var topRace = inverted[max];
+          var topCount = raceCount[topRace];
+
+          callback(err, {race: topRace, count: topCount});
+        });
+    }
+  ],
+  function(err, results) {
+    if (err) {return next(err);}
+
+    res.send({
+      totalCount: results[0],
+      amarrCount: results[1],
+      caldarCount: results[2],
+      gallenteCount: results[3],
+      minmatarCount: results[4],
+      maleCount: results[5],
+      femaleCount: results[6],
+      totalVotes: results[7],
+      leadingRace: results[8],
+      leadingBloodline: results[9]
+    });
+  });
+});
 
 /**
  * PUT /api/characters
