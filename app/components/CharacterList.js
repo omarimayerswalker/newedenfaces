@@ -1,18 +1,12 @@
 'use strict';
 
 import React from 'react';
-import {
-  Link
-}
-from 'react-rounter';
-import {
-  isEqual
-}
-from 'underscore';
+import {Link} from 'react-router';
+import {isEqual} from 'underscore';
 import CharacterListStore from '../stores/CharacterListStore';
 import CharacterListActions from '../actions/CharacterListActions';
 
-class CharacterList exends React.Component {
+class CharacterList extends React.Component {
   constructor(props) {
     super(props);
     this.state = CharacterListStore.getState();
